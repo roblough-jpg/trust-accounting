@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trust Accounting — Century 21 Optimum Realty</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap');
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: #f0f0f0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #1a1916;
+}
+
+.login-wrap {
+  width: 100%;
+  max-width: 420px;
+  padding: 20px;
+}
+
+.brand {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.brand h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1a2e2b;
+  letter-spacing: -0.5px;
+  margin-bottom: 6px;
+}
+
+.brand p {
+  font-size: 14px;
+  color: #6b7280;
+  font-weight: 400;
+}
+
+.login-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 36px 32px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #374151;
+  margin-bottom: 8px;
+}
+
+.input-wrap {
+  position: relative;
+}
+
+input[type="email"],
+input[type="password"],
+input[type="text"] {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  color: #1a1916;
+  background: #fff;
+  border: 1.5px solid #d1d5db;
+  border-radius: 8px;
+  padding: 12px 16px;
+  width: 100%;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+input:focus {
+  border-color: #1a7a6e;
+  box-shadow: 0 0 0 3px rgba(26, 122, 110, 0.12);
+}
+
+.toggle-pw {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #9ca3af;
+  display: flex;
+  align-items: center;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.toggle-pw:hover { color: #374151; }
+.toggle-pw svg { width: 18px; height: 18px; }
+
+.btn-login {
+  width: 100%;
+  background: #1a7a6e;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 14px 16px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+  margin-top: 4px;
+}
+
+.btn-login:hover { background: #155f56; }
+.btn-login:disabled { background: #9ca3af; cursor: not-allowed; }
+
+.forgot-link {
+  display: block;
+  text-align: center;
+  margin-top: 16px;
+  font-size: 13px;
+  color: #1a7a6e;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.forgot-link:hover { text-decoration: underline; }
+
+.error-msg {
+  background: #fef2f2;
+  color: #991b1b;
+  border: 1px solid #fca5a5;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 13px;
+  margin-bottom: 18px;
+  display: none;
+}
+
+.footer-note {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+.spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255,255,255,0.35);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 0.65s linear infinite;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<div class="login-wrap">
+
+  <div class="brand">
+    <h1>Trust Accounting</h1>
+    <p>Century 21 Optimum Realty</p>
+  </div>
+
+  <div class="login-card">
+
+    <div class="error-msg" id="error-msg"></div>
+
+    <div class="form-group">
+      <label for="email">Email Address</label>
+      <input type="email" id="email" placeholder="you@brokerage.com" autocomplete="username">
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password</label>
+      <div class="input-wrap">
+        <input type="password" id="password" placeholder="••••••••" autocomplete="current-password">
+        <button class="toggle-pw" onclick="togglePassword()" tabindex="-1" title="Show/hide password">
+          <svg id="eye-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+              d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7
+                 -1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <button class="btn-login" id="login-btn" onclick="handleLogin()">Sign In</button>
+
+    <a class="forgot-link" href="#" onclick="handleForgotPassword(event)">Forgot your password?</a>
+
+  </div>
+
+  <div class="footer-note">Accounts are created by your brokerage administrator.</div>
+
+</div>
+
+<script>
+const SUPABASE_URL = 'https://ygatvjjqrerswsrwmijd.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlnYXR2ampxcmVyc3dzcndtaWpkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODExODk2NjgsImV4cCI6MjA5Njc2NTY2OH0.ct-JwnYKxWZFKJ6aq-l4H6A4hOuEkvosP5ZTvSSg1Hk';
+
+let sbClient = null;
+
+async function initLogin() {
+  await new Promise((res, rej) => {
+    const s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
+    s.onload = res; s.onerror = rej;
+    document.head.appendChild(s);
+  });
+
+  sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  const { data: { session } } = await sbClient.auth.getSession();
+  if (session) { window.location.href = 'app.html'; return; }
+
+  ['email','password'].forEach(id => {
+    document.getElementById(id).addEventListener('keydown', e => {
+      if (e.key === 'Enter') handleLogin();
+    });
+  });
+}
+
+function togglePassword() {
+  const pw = document.getElementById('password');
+  const icon = document.getElementById('eye-icon');
+  const showing = pw.type === 'text';
+  pw.type = showing ? 'password' : 'text';
+  icon.innerHTML = showing
+    ? `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+         d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+         d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7
+            -1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>`
+    : `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+         d="M13.875 18.825A10.05 10.05 0 0112 19c-4.477 0-8.268-2.943-9.542-7
+            a9.97 9.97 0 012.555-4.28M6.22 6.22A9.956 9.956 0 0112 5
+            c4.477 0 8.268 2.943 9.542 7a9.973 9.973 0 01-4.293 5.452
+            M6.22 6.22L3 3m18 18l-3.22-3.22M9.88 9.88a3 3 0 104.24 4.24"/>`;
+}
+
+async function handleLogin() {
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  const btn = document.getElementById('login-btn');
+  const errEl = document.getElementById('error-msg');
+
+  errEl.style.display = 'none';
+
+  if (!email || !password) {
+    showError('Please enter your email address and password.');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>Signing in\u2026';
+
+  try {
+    const { data, error } = await sbClient.auth.signInWithPassword({ email, password });
+
+    if (error) {
+      showError('Invalid email or password. Please try again.');
+      btn.disabled = false;
+      btn.textContent = 'Sign In';
+      return;
+    }
+
+    window.location.href = 'app.html';
+
+  } catch (e) {
+    showError('Something went wrong. Please try again.');
+    btn.disabled = false;
+    btn.textContent = 'Sign In';
+  }
+}
+
+async function handleForgotPassword(e) {
+  e.preventDefault();
+  const email = document.getElementById('email').value.trim();
+  if (!email) {
+    showError('Enter your email address above, then click Forgot your password.');
+    return;
+  }
+  const { error } = await sbClient.auth.resetPasswordForEmail(email, {
+    redirectTo: window.location.origin + '/app.html'
+  });
+  if (!error) {
+    const el = document.getElementById('error-msg');
+    el.textContent = '\u2713 Password reset email sent. Check your inbox.';
+    el.style.background = '#f0fdf4';
+    el.style.color = '#166534';
+    el.style.borderColor = '#86efac';
+    el.style.display = 'block';
+  } else {
+    showError('Could not send reset email. Please try again.');
+  }
+}
+
+function showError(msg) {
+  const el = document.getElementById('error-msg');
+  el.textContent = msg;
+  el.style.background = '#fef2f2';
+  el.style.color = '#991b1b';
+  el.style.borderColor = '#fca5a5';
+  el.style.display = 'block';
+}
+
+initLogin();
+</script>
+</body>
+</html>
